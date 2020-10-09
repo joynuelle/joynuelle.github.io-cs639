@@ -29,7 +29,7 @@ One potential extension of our research is combining multiple similar images to 
 
 
 ### Approximate Timeline:
-- [ ] October 7: Selected features
+- [x] October 7: Selected features
 - [ ] October 13: HW 2 due (official deadline)
 - [ ] October 16: Selected datasets
 - [ ] October 27: HW 3 due (official deadline)
