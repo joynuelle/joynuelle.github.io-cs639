@@ -30,8 +30,8 @@ One potential extension of our research is combining multiple similar images to 
 
 ### Approximate Timeline:
 - [x] October 7: Selected features
-- [ ] October 13: HW 2 due (official deadline)
-- [ ] October 16: Selected datasets
+- [x] October 13: HW 2 due (official deadline)
+- [x] October 16: Selected datasets
 - [ ] October 27: HW 3 due (official deadline)
 - [ ] October 30: Extracted first feature from datasets 
 - [ ] November 3: Midterm project report (official deadline)
