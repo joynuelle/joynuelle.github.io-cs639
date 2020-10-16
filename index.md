@@ -39,6 +39,7 @@ One potential extension of our research is combining multiple similar images to 
 - [ ] November 23: Extracted all features from datasets
 - [ ] December 1: Evaluated performance against existing research and human judgments
 - [ ] December 3: HW5 due (official deadline)
+- [ ] December 8: Class presentation (official deadline)
 - [ ] December 10: Completed final project (official deadline)
 
 ### References:
