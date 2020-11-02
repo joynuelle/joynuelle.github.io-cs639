@@ -52,26 +52,26 @@ So far, we have implemented our first two features, out of five total. We took a
 This feature is the average pixel value across all color channels, yielding an integer in range [0, 255]. The result is the same whether averaging across color channels, or converting to grayscale and then taking the average grayscale pixel value.
 
 Below is an example of the results found from calculating the lightest, median, and darkest images across a dataset:
-![lightness image]()
+![lightness image](/images/lightness.png)
 
 #### Perceived Lightness
-In addition to lightness, we implemented perceived lightness, which takes into account human perception of different colors. This is calculated by taking the average pixel value across all color channels, but scaled and gamma-decoded for human perception. It yields a decimal value in range [0,1]. We consulted this post among other resources.
+In addition to lightness, we implemented perceived lightness, which takes into account human perception of different colors. This is calculated by taking the average pixel value across all color channels, but scaled and gamma-decoded for human perception. It yields a decimal value in range [0,1]. We consulted [this post](https://stackoverflow.com/questions/596216/formula-to-determine-brightness-of-rgb-color/56678483#56678483)  among other resources.
 
-In order to calculate the value, first divide the color image by 255 to scale each pixel into range [0,1]. Then raise the scaled matrix to the power of 2.2, for gamma decoding (see gamma correction, source 1, source 2). Finally, multiply each color channel by its appropriate scaled value based on humans’ perception of that color. Humans are most sensitive to green (0.7152), medium to red (0.2126), and least to blue (0.0722) (see relative luminance, source).
+In order to calculate the value, first divide the color image by 255 to scale each pixel into range [0,1]. Then raise the scaled matrix to the power of 2.2, for gamma decoding (see [gamma correction](https://en.wikipedia.org/wiki/Gamma_correction), [source 1](http://poynton.ca/PDFs/Rehabilitation_of_gamma.pdf), [source 2](http://poynton.ca/notes/colour_and_gamma/GammaFAQ.html#NTSC)). Finally, multiply each color channel by its appropriate scaled value based on humans’ perception of that color. Humans are most sensitive to green (0.7152), medium to red (0.2126), and least to blue (0.0722) (see [relative luminance](https://en.wikipedia.org/wiki/Relative_luminance), [source](https://www.w3.org/Graphics/Color/sRGB)).
 
 The results are similar to basic lightness, but perceived lightness does yield a different lightest image on the same dataset:
-![perceived lightness image]()
+![perceived lightness image](/images/perceived_lightness.png)
 
 #### Blur
-By using the imgradient function to get the image gradient of a grayscale image, we sorted the values to identify the top values, and saved the median of those top values to calculate how blurry a photo is (see this post). Then we saved the max and min values within the set and displayed those so we could visually compare how blurry and sharp the photos were. Below is an example of the sharpest and blurriest images within one dataset:
-![blur image]()
+By using the imgradient function to get the image gradient of a grayscale image, we sorted the values to identify the top values, and saved the median of those top values to calculate how blurry a photo is (see [this post](https://stackoverflow.com/questions/34525897/extract-motion-blur-of-an-image-in-matlab)). Then we saved the max and min values within the set and displayed those so we could visually compare how blurry and sharp the photos were. Below is an example of the sharpest and blurriest images within one dataset:
+![blur image](/images/blur.png)
 
 #### Challenges, revisions, and going forward
 We are on schedule! No revisions are needed for our project scope or timeline.
 
 In testing our first feature implementations, we discovered that our celebrity datasets have a great deal of variability in size and resolution, which doesn’t align with our use case to compare across images taken in a similar time and environment. We will standardize image resolution within each dataset as much as possible. We can also easily take our own cell phone photos for sets of images that are even more consistent in size, lighting, setting, etc.
 
-We have three more features to implement: hue count, facial expression of eyes open versus closed, and the rule of thirds. We plan on implementing hue count as answered in this post, facial expression using CascadeObjectDetector (the cascade object detector uses the Viola-Jones algorithm to detect people's faces, noses, eyes, mouth, or upper body), and rule of thirds by dividing the photo into a 3x3 grid and using face detection to determine whether the face is covering the points of intersection of the image grid.
+We have three more features to implement: hue count, facial expression of eyes open versus closed, and the rule of thirds. We plan on implementing hue count as answered in [this post](https://www.mathworks.com/matlabcentral/answers/67359-how-to-count-number-of-hues-in-an-image), facial expression using CascadeObjectDetector (the [cascade object detector](https://www.mathworks.com/matlabcentral/answers/120449-how-to-detect-eyes-and-mouth-on-a-single-image-in-matlab) uses the Viola-Jones algorithm to detect people's faces, noses, eyes, mouth, or upper body), and rule of thirds by dividing the photo into a 3x3 grid and using face detection to determine whether the face is covering the points of intersection of the image grid.
 
 Our plan is to each implement one more feature in the next week or two (by 11/11 at the latest), and have all five features implemented by our originally planned deadline of 11/23.
 
