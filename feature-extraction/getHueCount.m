@@ -1,9 +1,6 @@
-function getHueCount()
-D = '/Users/JoyNuelle/Desktop/cs639/final_project/ariana_grande';  %jpg
-% D = '/Users/JoyNuelle/Desktop/cs639/final_project/sandra_oh'; %jpeg 
-% D = '/Users/JoyNuelle/Desktop/cs639/final_project/nick_jonas'; % mix of jpg and jpeg
-S = [dir(fullfile(D,'*.jpeg'));dir(fullfile(D,'*.jpg'))];  % pattern to match filenames.
-M = containers.Map('KeyType','int32','ValueType','double');
+function amount_of_color = getHueCount(D,S)
+amount_of_color = containers.Map('KeyType','char','ValueType','double');
+
 maxImg = 0;
 minImg = 0;
 curMax = 0; 
@@ -67,7 +64,7 @@ for imgNum = 1:numel(S)
         maxv = max(yV, 'all');
         max_v = imgNum;
     end
-    
+    amount_of_color(S(imgNum).name) = num_unique_colors;
 end
 
 % Display the most unique picture and least unique color-wise.

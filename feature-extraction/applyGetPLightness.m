@@ -1,16 +1,17 @@
-function applyFeature()
-D = '/Users/julkroll/Documents/jk/grad-ms/fall2020-courses/computer-vision/cv-final-project/joynuelle.github.io-cs639/Datasets/Ariana Grande'; % mix of jpg and jpeg
-S = [dir(fullfile(D,'*.jpeg'));dir(fullfile(D,'*.jpg'))];  % pattern to match filenames.
+function M = applyGetPLightness(D,S)
+% D = '/Users/julkroll/Documents/jk/grad-ms/fall2020-courses/computer-vision/cv-final-project/joynuelle.github.io-cs639/Datasets/Ariana Grande'; % mix of jpg and jpeg
+% S = [dir(fullfile(D,'*.jpeg'));dir(fullfile(D,'*.jpg'))];  % pattern to match filenames.
 numImages = numel(S);
 maxImg = 0;
 minImg = realmax;
 listImg = zeros([numImages, 1]);
 curMax = 0; 
 curMin = 0;
+M = containers.Map('KeyType','char','ValueType','double');
 
 for imgNum = 1:numImages
     F = fullfile(D,S(imgNum).name);
-    feature_value = get_perceived_lightness(F);
+    feature_value = getPerceivedLightness(F);
     if feature_value > maxImg
        maxImg = feature_value;
        curMax = imgNum;
@@ -20,6 +21,7 @@ for imgNum = 1:numImages
         curMin = imgNum;
     end
     listImg(imgNum) = feature_value;
+    M(S(imgNum).name) = feature_value;
 end
 
 medianImg = median(listImg);

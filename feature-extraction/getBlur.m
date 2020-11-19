@@ -1,10 +1,6 @@
 %% Adjusted from - https://stackoverflow.com/questions/34525897/extract-motion-blur-of-an-image-in-matlab
-function getBlur()
-% D = '/Users/JoyNuelle/Desktop/cs639/final_project/ariana_grande';  %jpg
-% D = '/Users/JoyNuelle/Desktop/cs639/final_project/sandra_oh'; %jpeg 
-D = '/Users/JoyNuelle/Desktop/cs639/final_project/nick_jonas'; % mix of jpg and jpeg
-S = [dir(fullfile(D,'*.jpeg'));dir(fullfile(D,'*.jpg'))];  % pattern to match filenames.
-M = containers.Map('KeyType','int32','ValueType','double');
+function M = getBlur(D, S)
+M = containers.Map('KeyType','char','ValueType','double');
 maxImg = 0;
 minImg = realmax;
 curMax = 0; 
@@ -41,6 +37,7 @@ for imgNum = 1:numel(S)
         curMin = imgNum;
 %         disp('in min')
     end
+    M(S(imgNum).name) = measureOrigIm;
 end
 
 % disp(maxImg); disp(curMax);

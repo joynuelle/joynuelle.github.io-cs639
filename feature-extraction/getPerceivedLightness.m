@@ -1,4 +1,4 @@
-function mean_perceived = get_perceived_lightness(img_name) 
+function mean_perceived = getPerceivedLightness(img_name) 
 
 % Get starting image
 img_color = imread(img_name);
@@ -16,4 +16,4 @@ img_perceived(:,:,3) = img_gamma_encoded(:,:,3) * 0.0722;
 % Mean luminance (0,1)
 mean_perceived = mean2(img_perceived);
 
-fprintf('Mean perceived lightness: %.4f\n', mean_perceived);
+% fprintf('Mean perceived lightness: %.4f\n', mean_perceived);
