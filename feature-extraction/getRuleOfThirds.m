@@ -18,15 +18,19 @@ H_line1 = round(W/3);
 H_line2 = round(2 * W/3);
 
 % Get subject's face
-FaceDetector = vision.CascadeObjectDetector('ProfileFace'); % 'ProfileFace','FrontalFaceLBP'
+FaceDetector = vision.CascadeObjectDetector();
 % FaceDetector.MergeThreshold = 5;
 BB = step(FaceDetector, img); % BB = [x-coord, y-coord, x-addition, y-addition]
-out = insertObjectAnnotation(img, 'rectangle', BB, '');
 
-% TODO If there happens to be multiple boxes/faces, we could use the 
-% largest box, indicating the face that is most relevant to the image.
-% However - multiple boxes could also be the algorithm working badly, and
-% none are actually faces :(
+% Try profile if frontal face is not found
+if size(BB,1) == 0
+    FaceDetector = vision.CascadeObjectDetector('ProfileFace');
+    BB = step(FaceDetector, img);
+    if size(BB,1) > 0
+        display('Success with profile face');
+    end
+end
+out = insertObjectAnnotation(img, 'rectangle', BB, '');
 
 imshow(out);
 
@@ -37,6 +41,28 @@ line([0 W], [W_line2 W_line2], 'Color', 'white');
 % Vertical lines
 line([H_line1 H_line1], [0 H], 'Color', 'white');
 line([H_line2 H_line2], [0 H], 'Color', 'white');
+
+% If multiple boxes are found, use the largest one as the portrait face
+if size(BB,1) > 1
+    maxBoxDim = 0;
+    boxIndex = 1;
+    for i = 1:size(BB,1)
+        boxDim = BB(i,3);
+        if boxDim > maxBoxDim
+           maxBoxDim = boxDim;
+           boxIndex = i;
+        end
+    end
+    BB = BB(boxIndex,:);
+    out = insertObjectAnnotation(img, 'rectangle', BB, '', 'color','Red');
+    imshow(out);
+    % Horizontal lines
+    line([0 W], [W_line1 W_line1], 'Color', 'white'); % [X1 X2] [Y1 Y2]
+    line([0 W], [W_line2 W_line2], 'Color', 'white');
+    % Vertical lines
+    line([H_line1 H_line1], [0 H], 'Color', 'white');
+    line([H_line2 H_line2], [0 H], 'Color', 'white');
+end
 
 % If face is found, find bounding box dimensions and determine if the box
 % overlaps with both a horizontal and a vertical rule-of-thirds grid line.
