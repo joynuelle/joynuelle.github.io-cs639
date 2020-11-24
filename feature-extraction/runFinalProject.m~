@@ -33,20 +33,12 @@ else
     eyes_open_container = getEyesOpen(D,S); % returns if eyes are open w/ img title name
     rot_container = getRuleOfThirds(D,S);
     
-    [~,~, curMax, curMin, ~] = rank(S, blur_container, amount_of_color_container, amount_of_lightness_container, eyes_open_container, rot_container);
-    figure('Name','Best and Worst Image');
-    F = fullfile(D,S(curMax).name);
-        img = imread(F);
-        subplot(1,2,1), imshow(img);
-        title(['Overall highest ranked image: ', num2str(curMax)]);
-    F = fullfile(D,S(curMin).name);
-        img = imread(F);
-        subplot(1,2,2), imshow(img);
-        title(['Overall lowest ranked image: ', num2str(curMin)]);
+     maxImg, minImg, curMax, curMin, final_ranks = rank(S, blur_container, amount_of_color_container, amount_of_lightness_container, eyes_open_container, rot_container);
+
 end
 
 %% rank the images based off the data we got back
-function [maxImg, minImg, curMax, curMin, final_ranks] = rank(S, bc, cc, lc, eoc, rotc)
+function maxImg, minImg, curMax, curMin, final_ranks = rank(S, bc, cc, lc, eoc, rotc)
 maxImg = 0;
 minImg = realmax;
 curMax = 0; 
@@ -89,11 +81,13 @@ for imgNum = 1:numel(S)
     end
     
     if final_ranks(S(imgNum).name) > maxImg
-        maxImg = final_ranks(S(imgNum).name);
+        maxImg = measureOrigIm;
         curMax = imgNum;
+%         disp('in max')
     end
-    if final_ranks(S(imgNum).name) < minImg
-        minImg = final_ranks(S(imgNum).name);
+    if measureOrigIm < minImg
+        minImg = measureOrigIm;
         curMin = imgNum;
+%         disp('in min')
     end
 end

@@ -23,7 +23,7 @@ for imgNum = 1:numel(S)
         max_eye_pixel = max(img_gray(:));
         min_eye_pixel = min(img_gray(:));
         eye_spread = max_eye_pixel - min_eye_pixel;
-        fprintf('Eye spread is: %d\n', eye_spread);
+%         fprintf('Eye spread is: %d\n', eye_spread);
         if eye_spread > 200
             eyes_open = true;
         end
