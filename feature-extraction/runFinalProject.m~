@@ -54,10 +54,9 @@ curMin = 0;
 
 num_imgs = numel(S);
 final_ranks = containers.Map('KeyType','char','ValueType','double');
-disp(num_imgs);
+
 
 for imgNum = 1:numel(S)
-    disp(S(imgNum).name);
     final_ranks(S(imgNum).name) = 0;
     
     % Blur count number / num images is the score for this image
@@ -83,7 +82,7 @@ for imgNum = 1:numel(S)
     else
         final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) - 100;
     end
-%     fprintf('With eyes open: %.4f\n', final_ranks(S(imgNum).name));
+    
     % Rule of Thirds T/F = +100, or - 100 is the score for this image
 
     rule_of_thirds = rotc(S(imgNum).name);
@@ -92,8 +91,6 @@ for imgNum = 1:numel(S)
     else
         final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) - 100;
     end
-    fprintf('Final score with rule of thirds: %.4f\n', final_ranks(S(imgNum).name));
-
     
     if final_ranks(S(imgNum).name) > maxImg
         maxImg = final_ranks(S(imgNum).name);
@@ -105,4 +102,12 @@ for imgNum = 1:numel(S)
     end
 end
 
+the_keys = keys(final_ranks);
+the_values = values(final_ranks);
+for imgNum = 1:numel(S)
+    fprintf('Key %.2f: %.4f\n', the_keys(imgNum), the_values(imgNum));
+
+    disp([the_keys(imgNum), ': ', the_values(imgNum)]);
+end
+% disp('1');
 
