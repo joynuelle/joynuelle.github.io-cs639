@@ -19,9 +19,10 @@ runTests(varargin, fun_handles);
 
 %%
 function getData()
-D = uigetdir; % lets the user choose which folder of images they want to analyze
+% D = uigetdir; % lets the user choose which folder of images they want to analyze
 % D = 'datasets/celebrities/sandra_oh'; %jpeg 
 % D = 'datasets/celebrities/nick_jonas'; % mix of jpg and jpeg
+ D= /Users/JoyNuelle/Desktop/cs639/final_project/datasets/Julia1
 S = [dir(fullfile(D,'*.jpeg'));dir(fullfile(D,'*.jpg'))];  % pattern to match filenames.
 
 if numel(S) == 0
@@ -54,25 +55,26 @@ curMin = 0;
 
 num_imgs = numel(S);
 final_ranks = containers.Map('KeyType','char','ValueType','double');
-
+disp(num_imgs);
 
 for imgNum = 1:numel(S)
+    disp(S(imgNum).name);
     final_ranks(S(imgNum).name) = 0;
     
     % Blur count number / num images is the score for this image
-    blur_count = bc(S(imgNum).name) / num_imgs;
-%     fprintf('Blur count: %.4f\n', blur_count);
+    blur_count = bc(S(imgNum).name) / 10;
+    fprintf('Blur count: %.4f\n', blur_count);
     final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) + blur_count;
     
     % Hue count number / num images is the score for this image
     hue_count = cc(S(imgNum).name) / num_imgs;
     hue_count = hue_count / 100;
-%     fprintf('Hue count: %.4f\n', hue_count);
+    fprintf('Hue count: %.4f\n', hue_count);
     final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) + hue_count;
     
      % Lightness count number / num images is the score for this image
     light_count = lc(S(imgNum).name) * 100;
-%     fprintf('Light count: %.4f\n', light_count);
+    fprintf('Light count: %.4f\n', light_count);
     final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) + light_count;
     
     % Eyes open T/F = +100, or - 100 is the score for this image
@@ -82,15 +84,17 @@ for imgNum = 1:numel(S)
     else
         final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) - 100;
     end
-    
+%     fprintf('With eyes open: %.4f\n', final_ranks(S(imgNum).name));
     % Rule of Thirds T/F = +100, or - 100 is the score for this image
 
     rule_of_thirds = rotc(S(imgNum).name);
     if rule_of_thirds
-        final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) + 100;
-    else
-        final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) - 100;
+        final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) + 50;
+%     else
+%         final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) - 50;
     end
+    fprintf('Final score with rule of thirds: %.4f\n', final_ranks(S(imgNum).name));
+
     
     if final_ranks(S(imgNum).name) > maxImg
         maxImg = final_ranks(S(imgNum).name);
@@ -102,12 +106,4 @@ for imgNum = 1:numel(S)
     end
 end
 
-the_keys = keys(final_ranks);
-the_values = values(final_ranks);
-for imgNum = 1:numel(S)
-    fprintf('Key %.2f: %.4f\n', the_keys(imgNum), the_values(imgNum));
-
-    disp([the_keys(imgNum), ': ', the_values(imgNum)]);
-end
-% disp('1');
 

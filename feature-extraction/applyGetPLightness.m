@@ -24,19 +24,19 @@ for imgNum = 1:numImages
     M(S(imgNum).name) = feature_value;
 end
 
-medianImg = median(listImg);
-curMedian = find(listImg==medianImg, 1, 'first');
-
-figure('Name','Measured Data');
-F = fullfile(D,S(curMax).name);
-    img = imread(F);
-    subplot(1,3,1), imshow(img);
-    title(['Lightest perceived image: ', num2str(curMax), ' (value = ', num2str(maxImg), ')']);
-F = fullfile(D,S(curMedian).name);
-    img = imread(F);
-    subplot(1,3,2), imshow(img);
-    title(['Median perceived image: ', num2str(curMedian), ' (value = ', num2str(medianImg), ')']);
-F = fullfile(D,S(curMin).name);
-    img = imread(F);
-    subplot(1,3,3), imshow(img);
-    title(['Darkest perceived image: ', num2str(curMin), ' (value = ', num2str(minImg), ')']);
+% medianImg = median(listImg);
+% curMedian = find(listImg==medianImg, 1, 'first');
+% 
+% figure('Name','Measured Data');
+% F = fullfile(D,S(curMax).name);
+%     img = imread(F);
+%     subplot(1,3,1), imshow(img);
+%     title(['Lightest perceived image: ', num2str(curMax), ' (value = ', num2str(maxImg), ')']);
+% F = fullfile(D,S(curMedian).name);
+%     img = imread(F);
+%     subplot(1,3,2), imshow(img);
+%     title(['Median perceived image: ', num2str(curMedian), ' (value = ', num2str(medianImg), ')']);
+% F = fullfile(D,S(curMin).name);
+%     img = imread(F);
+%     subplot(1,3,3), imshow(img);
+%     title(['Darkest perceived image: ', num2str(curMin), ' (value = ', num2str(minImg), ')']);
