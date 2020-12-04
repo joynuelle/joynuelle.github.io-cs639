@@ -22,7 +22,7 @@ function getData()
 % D = uigetdir; % lets the user choose which folder of images they want to analyze
 % D = 'datasets/celebrities/sandra_oh'; %jpeg 
 % D = 'datasets/celebrities/nick_jonas'; % mix of jpg and jpeg
-D = '/Users/JoyNuelle/Desktop/cs639/final_project/datasets/Joy2';
+D = '/Users/JoyNuelle/Desktop/cs639/final_project/datasets/Julia1';
 S = [dir(fullfile(D,'*.jpeg'));dir(fullfile(D,'*.jpg'))];  % pattern to match filenames.
 
 if numel(S) == 0
@@ -58,22 +58,22 @@ final_ranks = containers.Map('KeyType','char','ValueType','double');
 % disp(num_imgs);
 
 for imgNum = 1:numel(S)
-%     disp(S(imgNum).name);
+    disp(S(imgNum).name);
     final_ranks(S(imgNum).name) = 0;
     
-    % Blur count number / num images is the score for this image
+%     Blur count number / num images is the score for this image
     blur_count = bc(S(imgNum).name);
 %     fprintf('Blur count: %.4f\n', blur_count);
     final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) + blur_count;
     
-    % Hue count number / num images is the score for this image
+%     Hue count number / num images is the score for this image
     hue_count = cc(S(imgNum).name) / num_imgs;
 %     fprintf('Hue count: %.4f\n', hue_count);
     hue_count = hue_count / 1000;
 %     fprintf('Hue count: %.4f\n', hue_count);
     final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) + hue_count;
     
-     % Lightness count number / num images is the score for this image
+%      Lightness count number / num images is the score for this image
     light_count = lc(S(imgNum).name) * 100;
 %     fprintf('Light count: %.4f\n', light_count);
     final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) + light_count;
@@ -90,9 +90,7 @@ for imgNum = 1:numel(S)
 
     rule_of_thirds = rotc(S(imgNum).name);
     if rule_of_thirds
-        final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) + 50;
-%     else
-%         final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) - 50;
+        final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) + 20;
     end
 %     fprintf('Final score with rule of thirds: %.4f\n', final_ranks(S(imgNum).name));
 
@@ -106,5 +104,22 @@ for imgNum = 1:numel(S)
         curMin = imgNum;
     end
 end
+
+
+keySet = keys(final_ranks);
+valueSet = values(final_ranks);
+valueSet = cell2mat(valueSet);
+[sortedValues, sortIdx] = sort( valueSet );
+sortedKeys = keySet( sortIdx );
+
+for imgNum = 1:numel(S)
+    fprintf('%.f -> image %s: %.4f\n', (numel(S)+1)-imgNum, string(sortedKeys(imgNum)), sortedValues(imgNum));
+end
+% for imgNum = 1:numel(S)
+%     fprintf('%.f -> image %s: %.4f\n', imgNum, string(keySet(imgNum)), final_ranks(S(imgNum).name));
+% end
+
+
+
 
 

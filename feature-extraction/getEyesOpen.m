@@ -11,32 +11,102 @@ for imgNum = 1:numel(S)
     img = imread(F);
     img_gray = rgb2gray(img);
     
+    
+    % Get subject's face
+    FaceDetector = vision.CascadeObjectDetector();
+    FaceDetector.MergeThreshold = 20;
+    BB = step(FaceDetector, img); % BB = [x-coord, y-coord, x-addition, y-addition]
+    
+    % Try profile if frontal face is not found
+    if size(BB,1) == 0
+        FaceDetector = vision.CascadeObjectDetector('ProfileFace');
+        BB = step(FaceDetector, img);
+%         if size(BB,1) > 0
+% %             display('Success with profile face');
+%         end
+    end
+    
+     % If multiple boxes are found, use the largest one as the portrait face
+    if size(BB,1) > 1
+        maxBoxDim = 0;
+        boxIndex = 1;
+        for i = 1:size(BB,1)
+            boxDim = BB(i,3);
+            if boxDim > maxBoxDim
+               maxBoxDim = boxDim;
+               boxIndex = i;
+            end
+        end
+        BB = BB(boxIndex,:);
+    end
+    
 %      I= imread('img.jpg');
      EyeDetect = vision.CascadeObjectDetector('EyePairBig');
-     BB=step(EyeDetect,img_gray);
-%      x=length(BB(:,4));
+     EyeDetect.UseROI = true;
+%      EyeDetect.roi = BB;
+     BBeyes = EyeDetect(img_gray, BB);
+%      BBeyes=step(EyeDetect,img_gray);
      
-     if isempty(BB)
+     if isempty(BBeyes)
          eyes_open_container(S(imgNum).name) = false;
+%          figure('Name','Eyes closed');
+%          imshow(img);
 %          disp('false');
      else
+          % If multiple boxes are found, use the largest one as the portrait face
+        if size(BBeyes,1) > 1
+            maxBoxDim = 0;
+            boxIndex = 1;
+            for i = 1:size(BBeyes,1)
+                boxDim = BBeyes(i,3);
+                if boxDim > maxBoxDim
+                   maxBoxDim = boxDim;
+                   boxIndex = i;
+                end
+            end
+            BBeyes = BBeyes(boxIndex,:);
+        end
+    
+%         cropped_eyes = imcrop(img, BBeyes);
+%         figure('Name',S(imgNum).name);
+%         imshow(cropped_eyes);
+        face_left = BB(1);
+        face_right = BB(1) + BB(3);
+        face_top = BB(2);
+        face_bottom = BB(2) + BB(4);
+        eye_left = BBeyes(1);
+        eye_right = BBeyes(1) + BBeyes(3);
+        eye_top = BBeyes(2);
+        eye_bottom = BBeyes(2) + BBeyes(4);
+        crosslr = eye_left > face_left && eye_right < face_right;
+        crosstb = eye_top > face_top && eye_bottom < face_bottom;
+        if crosslr && crosstb
+            eyes_open_container(S(imgNum).name) = true;
+%             disp('true');
+        end
+
+            
 %          x=length(BB(:,4));
-       %To detect Eyes
+%        %To detect Eyes
 %         I2 = imcrop(img,BB(x,:));
-%         figure,imshow(I2);
-         eyes_open_container(S(imgNum).name) = true;
+%         figure('Name',S(imgNum).name);
+%         imshow(I2);
+
+%         imshow(img);
+%         eyes_open_container(S(imgNum).name) = true;
 %          disp('true');
      end
+end
     
-   %To detect Eyes
+% %    To detect Eyes
 %     I2 = imcrop(img_gray,BB(x,:));
 %     figure,imshow(I2);
 %     figure, imshow(insertObjectAnnotation(img, 'rectangle', BB, 'Face'));
 %     rectangle('Position',BB,'LineWidth',4,'LineStyle','-','EdgeColor','b');
-    
-%     if 
-%     eyes_open_container(S(imgNum).name) = eyes_open;
-
+%     
+% %     if 
+% %     eyes_open_container(S(imgNum).name) = eyes_open;
+% 
 %    
 %     EyeDetector = vision.CascadeObjectDetector('EyePairBig'); % EyePairBig, EyePairSmall, LeftEye, RightEye
 %     EyeDetector.MergeThreshold = 10;
@@ -60,6 +130,6 @@ for imgNum = 1:numel(S)
 %     eyes_open_container(S(imgNum).name) = eyes_open;
 %     % imshow(out);
 % %     title([eyes_titles{eyes_open + 1}]);
-
-%     fprintf('Eyes open: %s\n', logical_str{eyes_open + 1});
-end
+% 
+% %     fprintf('Eyes open: %s\n', logical_str{eyes_open + 1});
+% end
