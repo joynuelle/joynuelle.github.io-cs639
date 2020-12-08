@@ -4,6 +4,7 @@
 
 Joy Nuelle - email: nuelle@wisc.edu <br />
 Julia Kroll - email: jkroll3@wisc.edu
+Our slides - https://docs.google.com/presentation/d/1lciKNwqGwnrzZFNALEH2i6eHCInVTmboA9VXBjecoKQ/edit?usp=sharing
 
 ### Proposal:
 With the rising popularity of smartphones over the past ten years, millions of users all over the world have had access to photography and the ability to capture billions of photos. It’s common to take multiple photos of the same scene, and when going back to delete some, either to clear up space or to simply choose the “aesthetically best” one to post on social media, this process can be difficult and time-consuming. The problem we are trying to solve is to first, define and continue doing research on what makes a photo aesthetically good, and second, create algorithms based on our research to help the average person decide when to keep or discard a photo, given multiples of a similar scene. Oftentimes, similar photos have subtle differences in colors, composition, contrast, lighting, etc, and our goal is to investigate the best combination of photograph features that contribute the most to a photograph’s aesthetic quality.
