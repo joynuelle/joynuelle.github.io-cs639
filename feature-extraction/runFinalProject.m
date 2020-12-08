@@ -29,7 +29,7 @@ if numel(S) == 0
     disp("Didn't find any photos to analyze...");
 else
     blur_container = getBlur(D,S); % returns amount of blur w/img title name
-    amount_of_color_container = getHueCount(D,S); % returns amount of unique colors w/img title name
+    amount_of_color_container = getUniqueColorCount(D,S); % returns amount of unique colors w/img title name
     amount_of_lightness_container = applyGetPLightness(D,S); % returns amount of lightness w/img title name
     eyes_open_container = getEyesOpen(D,S); % returns if eyes are open w/ img title name
     rot_container = getRuleOfThirds(D,S);
@@ -63,19 +63,17 @@ for imgNum = 1:numel(S)
     
 %     Blur count number / num images is the score for this image
     blur_count = bc(S(imgNum).name);
-%     fprintf('Blur count: %.4f\n', blur_count);
+    fprintf('Blur count: %.4f\n', blur_count);
     final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) + blur_count;
     
 %     Hue count number / num images is the score for this image
-    hue_count = cc(S(imgNum).name) / num_imgs;
-%     fprintf('Hue count: %.4f\n', hue_count);
-    hue_count = hue_count / 1000;
-%     fprintf('Hue count: %.4f\n', hue_count);
+    hue_count = cc(S(imgNum).name) / 1000;
+    fprintf('Hue count: %.4f\n', hue_count);
     final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) + hue_count;
     
 %      Lightness count number / num images is the score for this image
     light_count = lc(S(imgNum).name) * 100;
-%     fprintf('Light count: %.4f\n', light_count);
+    fprintf('Light count: %.4f\n', light_count);
     final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) + light_count;
     
     % Eyes open T/F = +100, or - 100 is the score for this image
@@ -85,14 +83,14 @@ for imgNum = 1:numel(S)
     else
         final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) - 100;
     end
-%     fprintf('With eyes open: %.4f\n', final_ranks(S(imgNum).name));
+    fprintf('With eyes open: %.4f\n', final_ranks(S(imgNum).name));
     % Rule of Thirds T/F = +100, or - 100 is the score for this image
 
     rule_of_thirds = rotc(S(imgNum).name);
     if rule_of_thirds
         final_ranks(S(imgNum).name) = final_ranks(S(imgNum).name) + 20;
     end
-%     fprintf('Final score with rule of thirds: %.4f\n', final_ranks(S(imgNum).name));
+    fprintf('Final score with rule of thirds: %.4f\n', final_ranks(S(imgNum).name));
 
     
     if final_ranks(S(imgNum).name) > maxImg

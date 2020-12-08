@@ -1,16 +1,10 @@
-function amount_of_color = getHueCount(D,S)
+function amount_of_color = getUniqueColorCount(D,S)
 amount_of_color = containers.Map('KeyType','char','ValueType','double');
 
 maxImg = 0;
 minImg = 0;
 curMax = 0; 
 curMin = realmax;
-maxh = 0;
-max_h = 0;
-maxv = 0;
-max_v = 0;
-maxs = 0;
-max_s = 0;
 for imgNum = 1:numel(S)
     F = fullfile(D,S(imgNum).name);
 %     disp(S(imgNum).name);
