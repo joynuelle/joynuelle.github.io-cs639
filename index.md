@@ -3,7 +3,7 @@
 ## CS 639: Computer Vision Final Project
 
 Joy Nuelle - email: nuelle@wisc.edu <br />
-Julia Kroll - email: jkroll3@wisc.edu
+Julia Kroll - email: jkroll3@wisc.edu <br />
 Our slides - https://docs.google.com/presentation/d/1lciKNwqGwnrzZFNALEH2i6eHCInVTmboA9VXBjecoKQ/edit?usp=sharing
 
 ### Proposal:
@@ -40,8 +40,8 @@ One potential extension of our research is combining multiple similar images to 
 - [x] November 23: Extracted all features from datasets
 - [x] December 1: Evaluated performance against existing research and human judgments
 - [x] December 3: HW5 due (official deadline)
-- [ ] December 8: Class presentation (official deadline)
-- [ ] December 10: Completed final project (official deadline)
+- [x] December 8: Class presentation (official deadline)
+- [x] December 10: Completed final project (official deadline)
 
 ### Midterm Project Report:
 #### Progress
@@ -85,17 +85,43 @@ In further work, we could investigate a more sophisticated weighting system acro
 
 We will also have several humans judge the aesthetic quality of images in each dataset, and compare the algorithm’s rankings to the humans’ rankings.
 
+### Post-Midterm/Final Update
+#### Continued Features: Eyes Open
+We used [vision.CascadeObjectDetector](https://www.mathworks.com/help/vision/ref/vision.cascadeobjectdetector-system-object.html) to locate the face in the image, and then detected the eyes within the face, using the region of interest(ROI) as the face that the detector found first. The [default CascadeObjectDetector](https://www.mathworks.com/help/vision/ref/vision.cascadeobjectdetector-system-object.html) is pre-trained and applies the Viola-Jones algorithm to detect people’s faces, noses, eyes, mouth, or upper body. We used ‘EyePairBig’ to detect eyes because for our datasets, we used portraits and the eyes were assumed to be a big part of the photo. If the detectors found multiple eyes or faces, it would save the biggest face as the one we would look at to see if there were eyes in that region. Likewise, it would use the biggest set of eyes that were found in order to compute whether or not those eyes were in the dimensions of the face that was found. It did a good job detecting whether or not there were eyes in the photo, but didn’t do a good job at detecting whether the eyes were actually open or closed. 
+
+#### Hue count
+To detect the image with the greatest number of unique colors, we reshape the image and then use unique to return the image’s unique colors in an array. The idea for this feature is to take the image that returned the most unique colors, because if there aren’t as many unique colors, it could either be too dark or too light, and we want to have diverse colors in the photo to represent highlights and lowlights/shadows.
+
+#### Rule of Thirds
+To calculate Rule of Thirds, we implemented an algorithm that executes the following steps. First divide the image’s height and width by three to get the location of lines on the 3x3 grid. Then use vision.CascadeObjectDetector() to find the bounding box for the subject’s face. If there happens to be multiple boxes/faces detected, use the largest box, assuming that the largest face is closest to the photographer and therefore most likely to be the intended subject.
+The CascadeObjectDetector defaults to the FrontalFaceCART classification model, but if a frontal face is not found, then see if a profile face can be detected using the ProfileFace model.
+Once the grid and face have been located, see if the face’s bounding box overlaps with one of the four intersection points. If there is an overlap, that means the image meets the rule of thirds principle. Otherwise, it does not.
+
+### Algorithm and Results
+In analyzing the results, we highlighted all the human rankings for both photo sets that were in a person’s top 10 choices (ranked from 1-10). Then, we found the algorithm’s rankings of photos 1-10 and color-coded the algorithm column based on how many humans did or did not agree with it. 
+For the indoor images, which had more similar backgrounds and varied more in blurriness, eyes open or closed, and rule of thirds, the algorithm did decent with only one false positive, where no humans favored image #10 when the algorithm ranked it #6. 
+For the outside dataset, our algorithm didn’t do as well and had more varying factors, such as how much light was in the image. It chose 5 images that no humans agreed with to be in the top 10, and also had 9 images that could have made it into the top 10, but it missed. There was a 50% chance of getting it categorized in accordance with what humans agreed with (50% red, 50% green). 
+
+#### Problems Encountered, and Potential Solutions For Improvement
+One problem we encountered multiple times was our feature calculation for eyes open or closed. The Viola-Jones algorithm was useful for calculating whether or not there were a pair of eyes in the photo, but it was not tailored to detect whether eyes were open or closed. Therefore, our algorithm was less accurate because it would sometimes find eyes that were closed and return true for eyes open/closed, giving the image a boost above others in the rankings. If we had more time, we would try to develop a more sophisticated algorithm to better detect if the eyes that the Viola-Jones’ algorithm returned were open or not. 
+Another issue we encountered was the blur measurement in the outdoor photos. Our blur feature implementation would actually pick up clouds as being “blurry”, and preferred the photos where the sun came in sharply because there was no “blurry sky” to see. Whereas when we were indoors, blur was analyzed more accurately. 
+As a future improvement, we could allow the user to choose the least blurred photo and then compare the other photos to that one photo that the user provided, giving us a more accurate calculation. 
+
+### Conclusion
+In conclusion, we were able to compute two high-level features (rule of thirds, eyes open) and three low-level features (blur, hue count, perceived lightness) in order to rank the aesthetic quality of each image within a portrait dataset. 
+Several papers we researched, such as [Automated Aesthetic Analysis of Photographic Images](https://ieeexplore.ieee.org/abstract/document/6658325) and [Assessing the Aesthetic Quality of Photographs Using Generic Image Descriptors](https://ieeexplore.ieee.org/abstract/document/6126444), used a binary classification. We implemented a variety of different features drawn from past research, and integrated them into an algorithm that not only classified images in a binary decision of a “good” or “bad” image, but took a relative approach of comparing images within a dataset, which reached a consensus with human judgments for 14 photos out of the top 20 it selected from a total of 102 images. Therefore, we showed that it is feasible to use the combination of few basic features in order to align fairly closely with the subjective nature of humans deciding which images have the highest aesthetic quality. In our user study, we also experienced how it was a tedious and time-consuming task for humans to stack-rank datasets of 50 images, but our algorithm could accomplish the same task within a few seconds. As a result, we met our two main objectives of the project: we developed an algorithm that could estimate human perception of aesthetic quality, and then we used that algorithm to simplify and accelerate the task of selecting the highest-quality images within a large dataset of similar portrait photos.
 
 ### References:
+Aydın, T. O.,  Smolic, A., Gross, M. (2015, January). Automated Aesthetic Analysis of Photographic Images, in IEEE Transactions on Visualization and Computer Graphics, vol. 21, no. 1, pp. 31-42
+
+Deng, Yubin., Change Loy, Chen., Tang, Xiaoou. (2018, October). Aesthetic-Driven Image Enhancement by Adversarial Learning in MM '18: Proceedings of the 26th ACM international conference on Multimedia, pp. 870-878
+
 Grenoble, L. M., Perronnin, F., Csurka, G. (2013, November). Predicting the aesthetic value of an image. United States patent no. US008594385B2.
+
+Ke, Yan., Tang, Xiaoou., Jing, Feng. (2006). "The Design of High-Level Features for Photo Quality Assessment," in IEEE Computer Society Conference on Computer Vision and Pattern Recognition (CVPR'06), pp. 419-426
+
+L. Marchesotti, F. Perronnin, D. Larlus and G. Csurka, "Assessing the aesthetic quality of photographs using generic image descriptors," 2011 International Conference on Computer Vision, Barcelona, 2011, pp. 1784-1791, doi: 10.1109/ICCV.2011.6126444.
 
 Obrador, P., Saad, M., Suryanarayan, P., Oliver, N. (2014, February). Method to assess aesthetic quality of photographs. United States patent no. US008660342B2.
 
 Sutherland, A., Rathnavelu, K., Smith, E. (2014, September). Method and system to detect and select best photographs. United States patent no. US008837867B2.
-
-Aydın, T. O.,  Smolic, A., Gross, M. (2015, January). Automated Aesthetic Analysis of Photographic Images, in IEEE Transactions on Visualization and Computer Graphics, vol. 21, no. 1, pp. 31-42
-
-Ke, Yan., Tang, Xiaoou., Jing, Feng. (2006). "The Design of High-Level Features for Photo Quality Assessment," in IEEE Computer Society Conference on Computer Vision and Pattern Recognition (CVPR'06), pp. 419-426
- 
-Deng, Yubin., Change Loy, Chen., Tang, Xiaoou. (2018, October). Aesthetic-Driven Image Enhancement by Adversarial Learning in MM '18: Proceedings of the 26th ACM international conference on Multimedia, pp. 870-878
-
