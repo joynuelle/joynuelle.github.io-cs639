@@ -99,10 +99,11 @@ To detect the image with the greatest number of unique colors, we reshape the im
 To calculate Rule of Thirds, we implemented an algorithm that executes the following steps. First divide the image’s height and width by three to get the location of lines on the 3x3 grid. Then use vision.CascadeObjectDetector() to find the bounding box for the subject’s face. If there happens to be multiple boxes/faces detected, use the largest box, assuming that the largest face is closest to the photographer and therefore most likely to be the intended subject.
 The CascadeObjectDetector defaults to the FrontalFaceCART classification model, but if a frontal face is not found, then see if a profile face can be detected using the ProfileFace model.
 Once the grid and face have been located, see if the face’s bounding box overlaps with one of the four intersection points. If there is an overlap, that means the image meets the rule of thirds principle. Otherwise, it does not.
+For example, the image below does not meet our rule of thirds criteria because the face's bounding box does not overlap one of the points of intersection on the image:
 ![rot](/images/rot.png)
 
 ### Algorithm and Results
-In analyzing the results, we highlighted all the human rankings for both photo sets that were in a person’s top 10 choices (ranked from 1-10). Then, we found the algorithm’s rankings of photos 1-10 and color-coded the algorithm column based on how many humans did or did not agree with it. 
+In analyzing the results[(click here to see .xlsx file)](/datasets/performance-analysis.xlsx), we highlighted all the human rankings for both photo sets that were in a person’s top 10 choices (ranked from 1-10). Then, we found the algorithm’s rankings of photos 1-10 and color-coded the algorithm column based on how many humans did or did not agree with it. 
 For the indoor images, which had more similar backgrounds and varied more in blurriness, eyes open or closed, and rule of thirds, the algorithm did decent with only one false positive, where no humans favored image #10 when the algorithm ranked it #6. 
 For the outside dataset, our algorithm didn’t do as well and had more varying factors, such as how much light was in the image. It chose 5 images that no humans agreed with to be in the top 10, and also had 9 images that could have made it into the top 10, but it missed. There was a 50% chance of getting it categorized in accordance with what humans agreed with (50% red, 50% green). 
 ![results](/images/results_screenshot.png)
