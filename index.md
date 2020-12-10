@@ -105,7 +105,7 @@ For example, the image below does not meet our rule of thirds criteria because t
 ### Algorithm and Results
 In analyzing the results[(click here to download .xlsx file)](/datasets/performance-analysis.xlsx), we highlighted all the human rankings for both photo sets that were in a person’s top 10 choices (ranked from 1-10). Then, we found the algorithm’s rankings of photos 1-10 and color-coded the algorithm column based on how many humans did or did not agree with it. 
 For the indoor images, which had more similar backgrounds and varied more in blurriness, eyes open or closed, and rule of thirds, the algorithm did decent with only one false positive, where no humans favored image #10 when the algorithm ranked it #6. 
-For the outside dataset, our algorithm didn’t do as well and had more varying factors, such as how much light was in the image. It chose 5 images that no humans agreed with to be in the top 10, and also had 9 images that could have made it into the top 10, but it missed. There was a 50% chance of getting it categorized in accordance with what humans agreed with (50% red, 50% green). 
+For the outside dataset, our algorithm didn’t do as well and had more varying factors, such as how much light was in the image. It chose 5 images that no humans agreed with to be in the top 10, and also had 9 images that could have made it into the top 10, but it missed. 
 ![results](/images/results_screenshot.png)
 
 
